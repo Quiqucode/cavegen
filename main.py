@@ -10,8 +10,8 @@ class Rectangle(object):
             coords, outline=self.outline, fill=self.fill)
 
 def test():
-    h = 400
-    w = 400
+    h = 250
+    w = 250
 
     t = tk.Tk()
     c = tk.Canvas(t, height=h*3+3, width=w*3+3)
