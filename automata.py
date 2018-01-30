@@ -20,7 +20,7 @@ class Dungeon:
             #print("\n"*8)
             self.curr_pass += 1
 
-        while self.curr_pass < 12:
+        while self.curr_pass < 10:
             self.alg_pass(True)
             self.curr_pass += 1
 
