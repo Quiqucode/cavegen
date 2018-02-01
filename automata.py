@@ -32,14 +32,6 @@ class Dungeon:
         while curr_pass < polish_passes:
             self.alg_pass(True)
             curr_pass += 1
-
-        '''
-        for i in range(self.height):
-            for j in range(self.width):
-                if i == 0 or i == self.height-1:
-                    self.dungeon[i][j] = 0
-                elif j == 0 or j == self.width-1:
-                    self.dungeon[i][j] = 0'''
         
         #print(self)
 
@@ -104,21 +96,6 @@ class Dungeon:
                         new_dung[i].insert(j, 0)
                     else:
                         new_dung[i].insert(j, 1)
-            '''
-            if not polish:
-                for _ in range(400):
-                    i = rand.randint(0, self.height-1)
-                    j = rand.randint(0, self.width-1)
-
-                    adj = self.neighbors(False, i, j)
-                    adj_ext = self.neighbors(True, i, j)
-                    #birth threshold
-                    if adj >= 5 and self.dungeon[i][j] == 1:
-                        new_dung[i].insert(j, 0)
-                    elif adj_ext <= -1 and self.dungeon[i][j] == 1:
-                        new_dung[i].insert(j, 0)
-                    else:
-                        new_dung[i].insert(j, 1)'''
 
         self.dungeon = deepcopy(new_dung)
 
