@@ -1,35 +1,45 @@
 import random as rand
+import tkinter as tk
 from copy import deepcopy
 
 class Dungeon:
     def __init__(self):
         self.dungeon = None
-        self.curr_pass = 0
 
-    def init(self, h, w):
+    def init(self, h=200, w=200):
         self.dungeon = [[0 for x in range(h)] for y in range(w)] 
 
         self.height, self.width = h, w
 
-    def generate(self):
+    def generate(self, gen_passes=4, polish_passes=20):
+        #ideal parameters
+        #gen_passes = 4
+        #polish_passes = 20
         self.randomize()
+
+        curr_pass = 0
         
-        while self.curr_pass < 4:
+        while curr_pass < gen_passes:
             self.alg_pass(False)
             #print(self)
             #print("\n"*8)
-            self.curr_pass += 1
+            curr_pass += 1
 
-        while self.curr_pass < 10:
+        curr_pass = 0
+
+        #80 is extremely smooth
+        #20 is around the sweet spot
+        while curr_pass < polish_passes:
             self.alg_pass(True)
-            self.curr_pass += 1
+            curr_pass += 1
 
+        '''
         for i in range(self.height):
             for j in range(self.width):
                 if i == 0 or i == self.height-1:
                     self.dungeon[i][j] = 0
                 elif j == 0 or j == self.width-1:
-                    self.dungeon[i][j] = 0
+                    self.dungeon[i][j] = 0'''
         
         #print(self)
 
@@ -56,8 +66,8 @@ class Dungeon:
         return 0 <= row < self.height and 0 <= col < self.width
 
     def randomize(self):
-        for i in range(self.height):
-            for j in range(self.width):
+        for i in range(2, self.height-2):
+            for j in range(2, self.width-2):
                 no = rand.randint(0, 11)
                 if no in range(0,4):
 
@@ -94,7 +104,7 @@ class Dungeon:
                         new_dung[i].insert(j, 0)
                     else:
                         new_dung[i].insert(j, 1)
-
+            '''
             if not polish:
                 for _ in range(400):
                     i = rand.randint(0, self.height-1)
@@ -108,7 +118,7 @@ class Dungeon:
                     elif adj_ext <= -1 and self.dungeon[i][j] == 1:
                         new_dung[i].insert(j, 0)
                     else:
-                        new_dung[i].insert(j, 1)
+                        new_dung[i].insert(j, 1)'''
 
         self.dungeon = deepcopy(new_dung)
 
@@ -127,3 +137,30 @@ class Dungeon:
     def get_map(self):
         return self.dungeon
     
+class Rectangle(object):
+    def __init__(self, canvas, coords, fill, outline=None):
+        self.canvas = canvas
+        self.fill = fill
+        self.outline = outline if outline is not None else self.fill
+        self.canvas_id = self.canvas.create_rectangle(
+            coords, outline=self.outline, fill=self.fill)
+
+def test(height=80, width=80, gen_passes=4, polish_passes=12):
+    app = tk.Tk()
+    app.geometry("%sx%s" % (height*3+3, width*3+3))
+
+    canv = tk.Canvas(app, height=height*3+3, width=width*3+3)
+
+    map = Dungeon()
+    map.init(height, width)
+    map.generate(gen_passes, polish_passes)
+
+    for i in range(map.height):
+        for j in range(map.width):
+            if map.dungeon[i][j] == 0:
+                Rectangle(canv, (i*3, j*3, i*3+3, j*3+3), "black")
+
+    canv.pack()
+
+    app.mainloop(n=0)
+
